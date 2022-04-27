@@ -22,13 +22,15 @@ function checkFullHouse() {
 
   let fullHouses = [];
 
-  Object.entries(students).forEach(([key, value]) => {
-    if (value === 13) {
-      fullHouses.push("key");
-    }
-  });
+  if (students) {
+    Object.entries(students).forEach(([key, value]) => {
+      if (value === 13) {
+        fullHouses.push("key");
+      }
+    });
 
-  localStorage.setItem("fullHouses", JSON.stringify(fullHouses));
+    localStorage.setItem("fullHouses", JSON.stringify(fullHouses));
+  }
 
   return fullHouses;
 }
@@ -77,31 +79,39 @@ function showStudents() {
 }
 
 function randomHouse() {
-  const allHouses = ["gryffindor", "hufflepuff", "ravenclaw", "slytherin"];
+  const fullHouses = checkFullHouse();
+  //   const allHouses = ["gryffindor", "hufflepuff", "ravenclaw", "slytherin"];
+  const allHouses = ["gryffindor", "hufflepuff", "ravenclaw", "slytherin"].filter(
+    (val) => {
+      return fullHouses.indexOf(val == -1);
+    }
+  );
 
   return allHouses[Math.floor(Math.random() * allHouses.length)];
 }
 
 function chooseHouse(name) {
-  const house = getStudents();
-  if (!house) {
-    const chooseHouse = randomHouse();
-    return chooseHouse;
-  } else {
-    if (name.length < 10) {
-      const chooseHouse = ["gryffindor", "hufflepuff"][
-        Math.floor(Math.random() * ["gryffindor", "hufflepuff"].length)
-      ];
+  //   const house = getStudents();
+  //   if (!house) {
+  //     const chooseHouse = randomHouse();
+  //     return chooseHouse;
+  //   } else {
+  //     if (name.length < 10) {
+  //       const chooseHouse = ["gryffindor", "hufflepuff"][
+  //         Math.floor(Math.random() * ["gryffindor", "hufflepuff"].length)
+  //       ];
 
-      return chooseHouse;
-    } else {
-      const chooseHouse = ["ravenclaw", "slytherin"][
-        Math.floor(Math.random() * ["ravenclaw", "slytherin"].length)
-      ];
+  //       return chooseHouse;
+  //     } else {
+  //       const chooseHouse = ["ravenclaw", "slytherin"][
+  //         Math.floor(Math.random() * ["ravenclaw", "slytherin"].length)
+  //       ];
 
-      return chooseHouse;
-    }
-  }
+  //       return chooseHouse;
+  //     }
+  //   }
+  const chooseHouse = randomHouse();
+  return chooseHouse;
 }
 
 function sortingHat() {
@@ -135,7 +145,7 @@ function reset() {
   sortBtnEl.style.display = "inline-block";
   resetBtnEl.style.display = "none";
 
-  localStorage.removeItem("students");
+  localStorage.removeItem("houses");
 
   showStudents();
 }
