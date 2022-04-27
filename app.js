@@ -13,31 +13,32 @@ function getName() {
   return nameInputEl.value.trim();
 }
 
-function getStudents() {
+function getHouses() {
   return JSON.parse(localStorage.getItem("houses"));
 }
 
-function checkFullHouse() {
-  const students = getStudents();
+function checkHouses() {
+  const houses = getHouses();
+  console.log(houses);
 
-  let fullHouses = [];
+  let housesForRandom = [];
 
-  if (students) {
-    Object.entries(students).forEach(([key, value]) => {
-      if (value === 13) {
-        fullHouses.push("key");
+  if (houses) {
+    for (const house in houses) {
+      if (houses[house] < 13) {
+        housesForRandom.push(house);
       }
-    });
-
-    localStorage.setItem("fullHouses", JSON.stringify(fullHouses));
+    }
+  } else {
+    housesForRandom = ["gryffindor", "hufflepuff", "ravenclaw", "slytherin"];
   }
 
-  return fullHouses;
+  return housesForRandom;
 }
 
 function sumStudents() {
   // get students from local storage
-  const students = getStudents();
+  const students = getHouses();
   let sum = 0;
 
   if (students) {
@@ -52,18 +53,18 @@ function addStudentToHouse(house) {
   // update student to house in local storage
   let houses = {};
 
-  if (getStudents()) {
-    houses = getStudents();
+  if (getHouses()) {
+    houses = getHouses();
   }
 
   houses[house] = (houses[house] || 0) + 1;
   localStorage.setItem("houses", JSON.stringify(houses));
 
-  console.log(getStudents());
+  console.log(getHouses());
 }
 
 function showStudents() {
-  const hourses = getStudents();
+  const hourses = getHouses();
 
   if (!hourses) {
     gryffindorValueEl.innerText = "0";
@@ -79,37 +80,14 @@ function showStudents() {
 }
 
 function randomHouse() {
-  const fullHouses = checkFullHouse();
-  //   const allHouses = ["gryffindor", "hufflepuff", "ravenclaw", "slytherin"];
-  const allHouses = ["gryffindor", "hufflepuff", "ravenclaw", "slytherin"].filter(
-    (val) => {
-      return fullHouses.indexOf(val == -1);
-    }
-  );
+  const houses = checkHouses();
 
-  return allHouses[Math.floor(Math.random() * allHouses.length)];
+  console.log("houses for random : " + houses);
+
+  return houses[Math.floor(Math.random() * houses.length)];
 }
 
-function chooseHouse(name) {
-  //   const house = getStudents();
-  //   if (!house) {
-  //     const chooseHouse = randomHouse();
-  //     return chooseHouse;
-  //   } else {
-  //     if (name.length < 10) {
-  //       const chooseHouse = ["gryffindor", "hufflepuff"][
-  //         Math.floor(Math.random() * ["gryffindor", "hufflepuff"].length)
-  //       ];
-
-  //       return chooseHouse;
-  //     } else {
-  //       const chooseHouse = ["ravenclaw", "slytherin"][
-  //         Math.floor(Math.random() * ["ravenclaw", "slytherin"].length)
-  //       ];
-
-  //       return chooseHouse;
-  //     }
-  //   }
+function chooseHouse() {
   const chooseHouse = randomHouse();
   return chooseHouse;
 }
@@ -145,11 +123,29 @@ function reset() {
   sortBtnEl.style.display = "inline-block";
   resetBtnEl.style.display = "none";
 
-  localStorage.removeItem("houses");
+  const houses = {
+    gryffindor: 0,
+    hufflepuff: 0,
+    ravenclaw: 0,
+    slytherin: 0,
+  };
+
+  localStorage.setItem("houses", JSON.stringify(houses));
 
   showStudents();
 }
 
 (function main() {
+  if (!getHouses()) {
+    const houses = {
+      gryffindor: 0,
+      hufflepuff: 0,
+      ravenclaw: 0,
+      slytherin: 0,
+    };
+
+    localStorage.setItem("houses", JSON.stringify(houses));
+  }
+
   showStudents();
 })();
