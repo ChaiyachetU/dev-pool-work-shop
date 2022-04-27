@@ -109,10 +109,12 @@ function sortingHat() {
 
     // reset input field
     nameInputEl.value = "";
-  } else if (!(sumStudents() < 50)) {
-    sortBtnEl.style.display = "none";
-    resetBtnEl.style.display = "inline-block";
-    alert("ข้าได้ทำการคัดสรรครบทุกคนแล้ว!");
+
+    if (!(sumStudents() < 50)) {
+      sortBtnEl.style.display = "none";
+      resetBtnEl.style.display = "inline-block";
+      alert("ข้าได้ทำการคัดสรรครบทุกคนแล้ว!");
+    }
   } else {
     alert("บอกชื่อเจ้ามาด้วย!");
   }
